@@ -30,10 +30,12 @@ def runSweep(N, epsilon, device):
 				if i >= 64:
 					batch_size = 2
 				if i >= 256:
+					batch_size = 4
+				if i >= 1024:
 					batch_size = 8 # speed things up slightly
 			cand = torch.randn(batch_size, dim, **kwargs)
 			cand = cand / cand.norm(dim=1, keepdim=True).clamp_min(1e-12)
-			dp = db @ cand.T # with batched, this will be a matrix
+			dp = db @ cand.T # with batches, this will be a matrix
 			if torch.max(torch.abs(dp)) < epsilon: # so this will be reject all
 				db = torch.cat((db, cand), dim=0)
 				n = db.shape[0]-1
@@ -59,7 +61,8 @@ if __name__ == '__main__':
 		cnt = runSweep(N, 0.1, device)
 		np.save('concentration_cnt.npy', cnt)
 	for p in range(5, 14):
-		plt.plot(cnt[p-5, :], color=colors[p-5], label=f"{2**p}")
+		x = np.arange(1, cnt.shape[1]+1)
+		plt.plot(x, cnt[p-5, :], color=colors[p-5], label=f"{2**p}")
 	plt.legend()
 	plt.xscale('log')
 	plt.yscale('log')
