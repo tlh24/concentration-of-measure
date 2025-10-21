@@ -17,7 +17,7 @@ colors = [
 ] # gemini came up with this
 
 def runSweep(epsilon, device):
-	N = 200000
+	N = 250000
 	cnt = np.zeros((9, N))
 	kwargs = {'device':device, 'dtype':torch.float16}
 	for p in range(5, 14):
@@ -50,4 +50,6 @@ if __name__ == '__main__':
 	for p in range(5, 14):
 		plt.plot(cnt[p-5, :], color=colors[p-5], label=f"{2**p}")
 	plt.legend()
+	plt.xscale('log')
+	plt.yscale('log')
 	plt.show()
