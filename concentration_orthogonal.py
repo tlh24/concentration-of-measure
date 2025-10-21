@@ -17,7 +17,7 @@ colors = [
 ] # gemini came up with this
 
 def runSweep(epsilon, device):
-	N = 100000
+	N = 200000
 	cnt = np.zeros((9, N))
 	kwargs = {'device':device, 'dtype':torch.float16}
 	for p in range(5, 14):
